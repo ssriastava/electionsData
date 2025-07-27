@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    container_name: my-postgres
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    networks:
+      - mynet
+      
+  app:
+    image: shubhambalboa482/electiondata.jar
+    build: .
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+    networks:
+      - mynet
+      
+    volumes:
+      - ./backend/ls-data.csv:/csv-data/ls-data.csv
+      - ./init-scripts:/csv-data/
+
+
+networks:
+  mynet:
